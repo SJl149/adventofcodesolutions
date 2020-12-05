@@ -10,6 +10,14 @@ def convert_input_to_list_of_cred_dictionaries():
     return passports_list
 
 
+def get_valid_passports_part1(passports_list, fields):
+    valid_passports = []
+    for passport in passports_list:
+        if len(passport) > 6 and fields <= set(passport.keys()):
+            valid_passports.append(passport)
+    return valid_passports
+
+
 def validate_byr(byr):
     return byr.isdigit() and (1920 <= int(byr) <= 2002)
 
@@ -44,7 +52,7 @@ def validate_pid(pid):
     return pid.isdigit() and len(pid) == 9
 
 
-def validate_passport(passport):
+def validate_passport_part2(passport):
     is_valid = validate_byr(passport['byr'])
     is_valid = is_valid and validate_iyr(passport['iyr']) 
     is_valid = is_valid and validate_eyr(passport['eyr']) 
@@ -58,9 +66,9 @@ def validate_passport(passport):
 if __name__ == "__main__":
     passports_list = convert_input_to_list_of_cred_dictionaries()
     fields = {'byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid'}
-    valid_passports = []
-    for passport in passports_list:
-        if len(passport) > 6 and fields <= set(passport.keys()):
-            if validate_passport(passport):
-                valid_passports.append(passport)
-    print(len(valid_passports))
+
+    valid_passports_part1 = get_valid_passports_part1(passports_list, fields)
+    print(f'Part1 has {len(valid_passports_part1)} valid passports.')
+
+    valid_passports_part2 = [passport for passport in valid_passports_part1 if validate_passport_part2(passport)]
+    print(f'Part2 has {len(valid_passports_part2)} valid passports')
